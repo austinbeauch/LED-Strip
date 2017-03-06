@@ -7,14 +7,16 @@ This is basic Arduino code for controlling a 5v RGB LED strip. Although still in
 
 #Parts used
 Following is a list of all the parts I used and most links (some Canadian, eh). Any parts should work as long as the description match up.
-*Arduino uno
-*IR Receiver
-*[IR Remote](https://www.amazon.ca/iMOBILE-Player-Transmitter-Remote-Black/dp/B0016BVDIK)
-*Sound sensor (not necessary right now as music functionality  is minimal)
-*[12v RGB LED Strip](https://www.amazon.ca/JOYLAND-Flexible-Lights-Non-waterproof-Multi-colors/dp/B019IYTH0M/ref=sr_1_1?s=hi&ie=UTF8&qid=1488779154&sr=1-1&keywords=JOYLAND+12V+Flexible+RGB+LED+Strip+Lights+300+Units+5050+LEDs%2C+Non-waterproof+LED+Tape+Multi-colors+LED+Strips+Light+Pack+of+16.4ft%2F5m)
-*[NPN T0-220 MOSFET](https://www.amazon.ca/SODIAL-IRF3205-IRF3205PBF-Switching-Transistor/dp/B00K67YM7E/ref=sr_1_1?s=hi&ie=UTF8&qid=1488779132&sr=1-1&keywords=SODIAL%28R%29+10pc+IRF3205+IRF3205PBF+Fast+Switching+Power+Mosfet+Transistor+%2F+N+Channel+T0220)
-*[12v 3A Power Brick](https://www.amazon.ca/ZOSI-2000MA-supply-camera-system/dp/B015DXJ6NU/ref=sr_1_1?s=kitchen&ie=UTF8&qid=1488779283&sr=8-1&keywords=ZOSI+DC12V+3A+2000MA+US+power+supply+for+cctv+camera+system)
-*Wires
+
+* Arduino uno
+* IR Receiver
+* [IR Remote](https://www.amazon.ca/iMOBILE-Player-Transmitter-Remote-Black/dp/B0016BVDIK)
+* Sound sensor (not necessary right now as music functionality  is minimal)
+* [12v RGB LED Strip](https://www.amazon.ca/JOYLAND-Flexible-Lights-Non-waterproof-Multi-colors/dp/B019IYTH0M/ref=sr_1_1?s=hi&ie=UTF8&qid=1488779154&sr=1-1&keywords=JOYLAND+12V+Flexible+RGB+LED+Strip+Lights+300+Units+5050+LEDs%2C+Non-waterproof+LED+Tape+Multi-colors+LED+Strips+Light+Pack+of+16.4ft%2F5m)
+
+* [NPN T0-220 MOSFET](https://www.amazon.ca/SODIAL-IRF3205-IRF3205PBF-Switching-Transistor/dp/B00K67YM7E/ref=sr_1_1?s=hi&ie=UTF8&qid=1488779132&sr=1-1&keywords=SODIAL%28R%29+10pc+IRF3205+IRF3205PBF+Fast+Switching+Power+Mosfet+Transistor+%2F+N+Channel+T0220)
+* [12v 3A Power Brick](https://www.amazon.ca/ZOSI-2000MA-supply-camera-system/dp/B015DXJ6NU/ref=sr_1_1?s=kitchen&ie=UTF8&qid=1488779283&sr=8-1&keywords=ZOSI+DC12V+3A+2000MA+US+power+supply+for+cctv+camera+system)
+* Wires
 
 #Installation and usage
 
@@ -25,8 +27,11 @@ If you're even looking at this repo after checking the schematic and parts list,
 After installing the [Arduino IDE](https://www.arduino.cc/en/Main/Software) and downloading the main .ino file, create a directory named "LED-Strip" wherever you please. NOTE: The file MUST be in a folder named EXACTLY the same as it! This is a nit-picky arduino thing.
 
 Connect your Arduino (or micro-controller of choice) to the computer via usb, open the .ino file, and then in the Arduino IDE go into 
+  
   > Tools
+  
   > Port
+  
 And select the correct port that your system recognizes the Arduino on (mine is COM3).
 
 Download and install your choice of [infared remote library](https://github.com/z3t0/Arduino-IRremote).
@@ -38,7 +43,7 @@ This will determine if button presses actually register as being anything. A com
 
 #TODO
 Just to name a few of the functions I plan on implementing:
-*Fix the music responsiveness (complications with interference between LED voltage and sound sensor)
-*Accept button presses while cycling
-*Add manual colour cycles
-*Hide under desk so there isn't a mess of wires on top of my computer open for the world to see
+* Fix the music responsiveness (complications with interference between LED voltage and sound sensor)
+* Accept button presses while cycling
+* Add manual colour cycles
+* Hide under desk so there isn't a mess of wires on top of my computer open for the world to see
