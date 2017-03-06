@@ -41,7 +41,7 @@ Now you should just be able to press whatever buttons you mapped earlier to cont
 
 #TODO
 Future steps for the program  include
-* Fix the music responsiveness (complications with interference between LED voltage and sound sensor)
-* Accept button presses while cycling
-* Add manual colour cycles
-* Hide under desk so there isn't a mess of wires on top of my computer open for the world to see
+* Fixing the music responsiveness (complications with interference between LED voltage and sound sensor)
+* Accepting button presses while cycling
+* Adding manual colour cycles
+* Hiding under desk so there isn't a mess of wires on top of my computer open for the world to see
