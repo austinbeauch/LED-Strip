@@ -16,7 +16,7 @@ Following is a list of all the parts I used and most links (some Canadian, eh). 
 * [12v 3A Power Brick](https://www.amazon.ca/ZOSI-2000MA-supply-camera-system/dp/B015DXJ6NU/ref=sr_1_1?s=kitchen&ie=UTF8&qid=1488779283&sr=8-1&keywords=ZOSI+DC12V+3A+2000MA+US+power+supply+for+cctv+camera+system)
 * Wires
 
-#Installation and usage
+#Setup and usage
 
 ## Steps:
 
@@ -33,6 +33,8 @@ And select the correct port that your system recognizes the Arduino on (mine is 
 Download and install your choice of [infared remote library](https://github.com/z3t0/Arduino-IRremote).
 
 Verify and upload the code to your Arduino.
+
+Now you should just be able to press whatever buttons you mapped earlier to control your LED strip! The next step is to wait until it's dark and admire your room's new lighting.
 
 ###Using the serial monitor, update the hex values labeled "const static double ..." to match whatever your remote is! Keep the '0x' in front of the values as these signify that it is a hexadecimal value.
 This will determine if button presses actually register as being anything. A comment saying what each button does on my setup is right next to each value. Feel free to map whatever buttons to whatever functions you want.
