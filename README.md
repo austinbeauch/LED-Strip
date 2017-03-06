@@ -1,7 +1,4 @@
-# LED-Strip
-Arduino remote controlled RGB LED Strip
-
-### An RGB LED Controller program developed by [Austin Beauchamp](https://www.linkedin.com/in/austinbeauchamp).
+### A Remote-Controlled RGB LED Arduino program developed by [Austin Beauchamp](https://www.linkedin.com/in/austinbeauchamp).
 
 This is basic Arduino code for controlling a 5v RGB LED strip. Although still in early stages, it can still function for turning on all the various colours with a remote and features a spectrum-cycling mode (enabling this mode requires a hard reset/power down of the Arduino to turn it off as the current loop can't accept any other button presses - but oh does it ever look pretty). Many obstacles such as overcoming controller delays to accept button pushes are being tackled - slowly but surely.
 
