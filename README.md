@@ -5,7 +5,7 @@
 This is basic Arduino code for controlling a 5v RGB LED strip. Although still in early stages, it can still function for turning on all the various colours with a remote and features a spectrum-cycling mode (enabling this mode requires a hard reset/power down of the Arduino to turn it off as the current loop can't accept any other button presses - but oh does it ever look pretty). Many obstacles such as overcoming controller delays to accept button pushes are being tackled - slowly but surely.
 
 #Parts used
-Following is a list of all the parts I used and most links (some Canadian, eh). Any parts should work as long as the description match up.
+Following is a list of parts, and most links (some Canadian, eh). Any parts should work as long as the description match up.
 
 * Arduino uno
 * [IR Receiver](https://www.amazon.ca/SODIAL-Receiving-Infrared-VS1838B-Receiver/dp/B00ZE9UGA6/ref=sr_1_7?ie=UTF8&qid=1488780104&sr=8-7&keywords=ir+receiver)
@@ -18,13 +18,12 @@ Following is a list of all the parts I used and most links (some Canadian, eh). 
 
 #Setup and usage
 ![Diagram](schematic.png)
-## Steps:
 
 If you're even looking at this repo after checking the schematic and parts list, you probably have a decent idea of what you're doing. These steps will most likely be useless. Not many people who order transistors and a straight LED strip for their Arduino need to know how to connect their board to the computer. But nevertheless: 
 
 Follow the schematic to connect all the components to a breadboard correctly. 
 
-##The LED strip will require 12v, which is more than the usb can supply. 
+###The LED strip will require 12v, which is more than the usb can supply. 
 
 I supply the voltage by connecting a 12v wall power supply to the 2.1mm barrel jack of the Arduino and then connect it through the vin pin. It is possible to use any type of external power source, but it must be 12v to get full luminosity.
 
