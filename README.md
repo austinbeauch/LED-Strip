@@ -22,6 +22,8 @@ Following is a list of all the parts I used and most links (some Canadian, eh). 
 
 If you're even looking at this repo after checking the schematic and parts list, you probably have a decent idea of what you're doing. These steps will most likely be useless. Not many people who order transistors and a straight LED strip for their Arduino need to know how to connect their board to the computer. But nevertheless: 
 
+Follow the schematic to connect all the components to a breadboard correctly. The LED strip will require 12v, which is more than the usb can supply. I supply the voltage by connecting a 12v wall power supply to the 2.1mm barrel jack of the Arduino and then connect it through the vin pin. It is possible to use any type of external power source, but it must be 12v to get full luminosity.
+
 After installing the [Arduino IDE](https://www.arduino.cc/en/Main/Software) and downloading the main .ino file, create a directory named "LED-Strip" wherever you please. NOTE: The file MUST be in a folder named EXACTLY the same as it! This is a nit-picky arduino thing.
 
 Connect your Arduino (or micro-controller of choice) to the computer via usb, open the .ino file, and then in the Arduino IDE go into 
