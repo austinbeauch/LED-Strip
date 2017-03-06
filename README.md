@@ -29,18 +29,18 @@ I supply the voltage by connecting a 12v wall power supply to the 2.1mm barrel j
 
 After installing the [Arduino IDE](https://www.arduino.cc/en/Main/Software) and downloading the main .ino file, create a directory named "LED-Strip" wherever you please. NOTE: The file MUST be in a folder named EXACTLY the same as it! This is a nit-picky arduino thing.
 
-Connect your Arduino (or micro-controller of choice) to the computer via usb, open the .ino file, and then in the Arduino IDE go into 
+Connect your Arduino to the computer via usb and open the .ino file. Then in the Arduino IDE, navigate to 
   
   > Tools -> Port
   
-And select the correct port that your system recognizes the Arduino on (mine is COM3).
+and select the correct port for your microcontroller (mine is COM3).
 
 Download and install your choice of [infared remote library](https://github.com/z3t0/Arduino-IRremote).
 
 Verify and upload the code to your Arduino.
 
 ###Using the serial monitor, update the hex values labeled "const static double ..." to match whatever your remote is! Keep the '0x' in front of the values as these signify that it is a hexadecimal value.
-This will determine if button presses actually register as being anything. A comment saying what each button does on my setup is right next to each value. Feel free to map whatever buttons to whatever functions you want.
+This will determine if button presses actually trigger a response from the code. A comment saying what each button does on my setup is right next to each value. Feel free to map whatever buttons to whatever functions you want.
 
 Now you should just be able to press whatever buttons you mapped earlier to control your LED strip! The next step is to wait until it's dark and admire your room's new lighting.
 
