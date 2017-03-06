@@ -9,7 +9,7 @@ This is basic Arduino code for controlling a 5v RGB LED strip. Although still in
 Following is a list of all the parts I used and most links (some Canadian, eh). Any parts should work as long as the description match up.
 
 * Arduino uno
-* IR Receiver
+* [IR Receiver](https://www.amazon.ca/SODIAL-Receiving-Infrared-VS1838B-Receiver/dp/B00ZE9UGA6/ref=sr_1_7?ie=UTF8&qid=1488780104&sr=8-7&keywords=ir+receiver)
 * [IR Remote](https://www.amazon.ca/iMOBILE-Player-Transmitter-Remote-Black/dp/B0016BVDIK)
 * Sound sensor (not necessary right now as music functionality  is minimal)
 * [12v RGB LED Strip](https://www.amazon.ca/JOYLAND-Flexible-Lights-Non-waterproof-Multi-colors/dp/B019IYTH0M/ref=sr_1_1?s=hi&ie=UTF8&qid=1488779154&sr=1-1&keywords=JOYLAND+12V+Flexible+RGB+LED+Strip+Lights+300+Units+5050+LEDs%2C+Non-waterproof+LED+Tape+Multi-colors+LED+Strips+Light+Pack+of+16.4ft%2F5m)
