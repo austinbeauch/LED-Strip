@@ -116,8 +116,6 @@ void loop() {
     //TODO: Accept more IR signals
     //TODO: Add a function to cycle whatever colours are currently turned on
     //TODO: Fix music() function
-    //TODO: Figure out how git works
-    //TODO: figure out if git is now working
 
     if(irrecv.decode(&results)){
              
