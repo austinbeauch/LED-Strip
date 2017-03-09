@@ -45,8 +45,9 @@ This will determine if button presses actually trigger a response from the code.
 Now you should just be able to press whatever buttons you mapped earlier to control your LED strip! The next step is to wait until it's dark and admire your room's new lighting.
 
 #TODO
-Future steps for the program  include
+Future steps for the program include
 * Fixing the music responsiveness (complications with interference between LED voltage and sound sensor)
-* Accepting button presses while cycling
+* Implement manual cycleRGB() spectrum cycle speeds
 * Adding manual colour cycles
 * Hiding under desk so there isn't a mess of wires on top of my computer open for the world to see
+More todo's are in the .ino file

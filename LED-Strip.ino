@@ -1,5 +1,11 @@
 //LED-Strip.ino
 //Author: Austin Beauchamp
+//TODO: Accept more IR signals
+//TODO: Add a function to cycle whatever colours are currently turned on
+//TODO: Fix music() function
+//TODO: Investigate weird coil whine when dimming lights or using cycleRBG() function.
+    //dimming to a certain point causes loss of responsiveness and gives off a slight whine where led strip plugs into breadboard
+//TODO: Implement manual cycleRGB() spectrum cycle speeds
 
 #include <IRremote.h>
 
@@ -144,12 +150,6 @@ void cycleRGB(){
 }
     
 void loop() {
-
-    //TODO: Accept more IR signals
-    //TODO: Add a function to cycle whatever colours are currently turned on
-    //TODO: Fix music() function
-    //TODO: Investigate weird coil whine when dimming lights or using cycleRBG() function.
-            //dimming to a certain point causes loss of responsiveness and gives off a slight whine where led strip plugs into breadboard
 
     if(irrecv.decode(&results)){ //if button has been pressed
              
