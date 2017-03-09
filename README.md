@@ -40,7 +40,9 @@ Download and install your choice of [infared remote library](https://github.com/
 Verify and upload the code to your Arduino.
 
 ###Using the serial monitor, update the hex values labeled "const static double ..." to match whatever your remote is! Keep the '0x' in front of the values as these signify that it is a hexadecimal value.
-This will determine if button presses actually trigger a response from the code. A comment saying what each button does on my setup is right next to each value. Feel free to map whatever buttons to whatever functions you want.
+This will determine if button presses actually trigger a response from the code. A comment saying what each button does on my setup is right next to each value. Feel free to map whatever buttons to whatever functions you want. 
+
+Reupload the code with your new button values.
 
 Now you should just be able to press whatever buttons you mapped earlier to control your LED strip! The next step is to wait until it's dark and admire your room's new lighting.
 
@@ -50,4 +52,5 @@ Future steps for the program include
 * Implement manual cycleRGB() spectrum cycle speeds
 * Adding manual colour cycles
 * Hiding under desk so there isn't a mess of wires on top of my computer open for the world to see
+
 More todo's are in the .ino file
