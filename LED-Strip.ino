@@ -1,3 +1,6 @@
+//LED-Strip.ino
+//Author: Austin Beauchamp
+
 #include <IRremote.h>
 
 //pin numbers
@@ -15,7 +18,7 @@ const static double five = 0xFF38C7; //cycleRGB()
 const static double plus = 0xFFA857; //brightness up
 const static double minus = 0xFFE01F; //brightness down
 
-int test;
+int test = 0;
 int brightness = 255;
 
 //initial state of LEDs
@@ -26,13 +29,20 @@ bool blue = false;
 IRrecv irrecv(RECV_PIN);
 decode_results results;
 
+//cycleRGB() variable
+int bluearr[] = {1,1,1,0,0,0};
+int redarr[] = {0, 0, 1, 1, 1, 0};
+int greenarr[] = {1, 0, 0, 0, 1, 1};
+int redCycle, greenCycle, blueCycle;
+int cycleTime; 
+
 void setup() {
   Serial.begin(9600);
   pinMode(GREEN,OUTPUT);
   pinMode(RED,OUTPUT);
   pinMode(BLUE,OUTPUT);
   irrecv.enableIRIn();
-  setColourRgb(0,0,0);
+  cycleTime = 20; 
 }
 
 void off(){
@@ -47,6 +57,8 @@ void on(){
   digitalWrite(BLUE,HIGH); 
 }
 
+
+//turns lights on accordingly
 void x123(int brightness){
   if(results.value == one){
     green = !green;
@@ -62,6 +74,7 @@ void x123(int brightness){
   }
 }
 
+//purely updating brightness
 void updateBrightness(int brightness){
   if(green) analogWrite(GREEN, brightness);
   if(red) analogWrite(RED, brightness);
@@ -71,7 +84,7 @@ void updateBrightness(int brightness){
 void music(){
 
   //TODO: Figure out why turning on any of the lights increases the read values (voltage from 12v psu might be interfering)
-  //TODO: Wait for multimeter to show up so I can test voltages
+  //TODO: Test voltages with multimeter
   
   int volume = digitalRead(13);
   Serial.println(volume);
@@ -87,44 +100,63 @@ void music(){
 }
 
 void cycleRGB(){
+  
+  bool pressed = false; //stores if a button has been pressed to signal a full loop stop of all loops
+  
+  for (int i=0; i<6; i++) {
+    
+    if(pressed) break;
+    
+    int k = (i+1)%6;
+    
+    for (int j=0; j<256; j++) {
+      
+      if(pressed) break;
+      
+      Serial.println(cycleTime); //where the colours changes are determined  
+      blueCycle = bluearr[i]*255+(bluearr[k] - bluearr[i])*j;
+      redCycle = redarr[i]*255+(redarr[k]  - redarr[i])*j;
+      greenCycle = greenarr[i]*255+(greenarr[k] - greenarr[i])*j;
 
-  //TODO: Work around the delay to accept more IR signals while cycling 
-  //  Remove for loop and use loop functionality of the Arduino potentially
-  unsigned int rgbColour[3];
+      analogWrite (RED, redCycle);
+      analogWrite (GREEN, greenCycle);
+      analogWrite (BLUE, blueCycle);
 
-  rgbColour[0] = 255;
-  rgbColour[1] = 0;
-  rgbColour[2] = 0;  
+      //acting as a 20ms delay and checking for button presses to know when to exit
+      long startTime = millis();
+      while(millis() - startTime < cycleTime){
+        if(irrecv.decode(&results)){
+          Serial.println(results.value, HEX);
 
-  //TODO: Remove these loops but maintain their functionality through the main system looping
-  for (int decColour = 0; decColour < 3; decColour++) {
-    int incColour = decColour == 2 ? 0 : decColour + 1;
-    for(int i = 0; i < 255; i++) {   
-      rgbColour[decColour] -= 1;
-      rgbColour[incColour] += 1;
-      setColourRgb(rgbColour[0], rgbColour[1], rgbColour[2]);
-      delay(5); //right here is where most time is spent in a dead-state so receiving another button press doesn't work
+          //potentially a good idea to alter cycle speeds, however it'll need some work
+          //if(results.value == plus && cycleTime<50) cycleTime += 1;
+          //else if(results.value == minus && cycleTime>1) cycleTime -= 1;
+          //else if(results.value != 0xFFFFFF){
+          
+          test=0;
+          pressed = true;
+          break;//hard breaking out of all the loops
+        }
+      }
     }
   }
+  if(pressed)off();//reset led states 
 }
-
-void setColourRgb(unsigned int red, unsigned int green, unsigned int blue) {
-  analogWrite(RED, red);
-  analogWrite(GREEN, green);
-  analogWrite(BLUE, blue);
- }
     
 void loop() {
 
     //TODO: Accept more IR signals
     //TODO: Add a function to cycle whatever colours are currently turned on
     //TODO: Fix music() function
+    //TODO: Investigate weird coil whine when dimming lights or using cycleRBG() function.
+            //dimming to a certain point causes loss of responsiveness and gives off a slight whine where led strip plugs into breadboard
 
     if(irrecv.decode(&results)){ //if button has been pressed
              
       //Serial.println(results.value, HEX);
       
       if(results.value == plus && brightness<255){
+      
         brightness += 51;
         updateBrightness(brightness);
       }
@@ -156,6 +188,8 @@ void loop() {
       }
       irrecv.resume();
     }
+    
+    Serial.print("TEST: ");
     Serial.println(test); //test line to see if function has changed
     if(test==4) music();
     else if(test==5) cycleRGB();
