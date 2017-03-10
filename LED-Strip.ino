@@ -40,7 +40,7 @@ int bluearr[] = {1,1,1,0,0,0};
 int redarr[] = {0, 0, 1, 1, 1, 0};
 int greenarr[] = {1, 0, 0, 0, 1, 1};
 int redCycle, greenCycle, blueCycle;
-int cycleTime; 
+int cycleTime = 20;
 
 void setup() {
   Serial.begin(9600);
@@ -48,7 +48,6 @@ void setup() {
   pinMode(RED,OUTPUT);
   pinMode(BLUE,OUTPUT);
   irrecv.enableIRIn();
-  cycleTime = 20; 
 }
 
 void off(){
@@ -60,9 +59,8 @@ void off(){
 void on(){
   digitalWrite(GREEN,HIGH);
   digitalWrite(RED,HIGH);
-  digitalWrite(BLUE,HIGH); 
+  digitalWrite(BLUE,HIGH);
 }
-
 
 //turns lights on accordingly
 void x123(int brightness){
@@ -75,7 +73,7 @@ void x123(int brightness){
     red ? analogWrite(RED, brightness) : digitalWrite(RED,LOW);
   }
   else if(results.value == three){
-    blue = !blue; 
+    blue = !blue;
     blue ? analogWrite(BLUE, brightness) : digitalWrite(BLUE,LOW);
   }
 }
@@ -91,35 +89,35 @@ void music(){
 
   //TODO: Figure out why turning on any of the lights increases the read values (voltage from 12v psu might be interfering)
   //TODO: Test voltages with multimeter
-  
+
   int volume = digitalRead(13);
   Serial.println(volume);
-  
-  off(); 
-   
+
+  off();
+
   if(green && volume>0) digitalWrite(GREEN, HIGH);
-  if(red && volume>0) digitalWrite(RED, HIGH); 
-  if(blue && volume>0) digitalWrite(BLUE, HIGH);   
+  if(red && volume>0) digitalWrite(RED, HIGH);
+  if(blue && volume>0) digitalWrite(BLUE, HIGH);
   delay(100);
-  
-  off(); 
+
+  off();
 }
 
-void cycleRGB(){
-  
+void cycleRGB(int cycleTime){
+
   bool pressed = false; //stores if a button has been pressed to signal a full loop stop of all loops
-  
+  bool check = true;
   for (int i=0; i<6; i++) {
-    
+
     if(pressed) break;
-    
+
     int k = (i+1)%6;
-    
+
     for (int j=0; j<256; j++) {
-      
+
       if(pressed) break;
-      
-      Serial.println(cycleTime); //where the colours changes are determined  
+
+      Serial.println(cycleTime); //where the colours changes are determined
       blueCycle = bluearr[i]*255+(bluearr[k] - bluearr[i])*j;
       redCycle = redarr[i]*255+(redarr[k]  - redarr[i])*j;
       greenCycle = greenarr[i]*255+(greenarr[k] - greenarr[i])*j;
@@ -130,67 +128,79 @@ void cycleRGB(){
 
       //acting as a 20ms delay and checking for button presses to know when to exit
       long startTime = millis();
-      while(millis() - startTime < cycleTime){
-        if(irrecv.decode(&results)){
-          Serial.println(results.value, HEX);
 
-          //potentially a good idea to alter cycle speeds, however it'll need some work
-          //if(results.value == plus && cycleTime<50) cycleTime += 1;
-          //else if(results.value == minus && cycleTime>1) cycleTime -= 1;
-          //else if(results.value != 0xFFFFFF){
-          
-          test=0;
-          pressed = true;
-          break;//hard breaking out of all the loops
+      //TODO: FIX ALL OF THIS
+      while(millis() - startTime < cycleTime){
+
+        if(irrecv.decode(&results) && check){
+
+          Serial.println(results.value, HEX);
+          /*
+          if(results.value == plus && cycleTime<50){
+            cycleTime++;
+            check = false;
+            //Serial.println(results.value, HEX);
+          }
+
+          else if(results.value == minus && cycleTime>1){
+            cycleTime--;
+            check = false;
+          }
+
+          else if(results.value != minus && results.value != plus && results.value != 0xFFFFFF){
+            Serial.print("EXIT: ");
+            Serial.println(results.value, HEX);*/
+            test=0;
+            pressed = true;
+            break;//hard breaking out of all the loops
+          }
         }
       }
     }
   }
-  if(pressed)off();//reset led states 
+  if(pressed)off();//reset led states
 }
-    
+
 void loop() {
 
-    if(irrecv.decode(&results)){ //if button has been pressed
-             
-      //Serial.println(results.value, HEX);
-      
-      if(results.value == plus && brightness<255){
-      
-        brightness += 51;
-        updateBrightness(brightness);
-      }
-      
-      else if(results.value == minus && brightness>0){
-        brightness -= 51;
-        updateBrightness(brightness);
-      }
-      
-      else if(results.value == one || results.value == two || results.value == three){
-        x123(brightness);
-      }
-      
-      else if(results.value == four){  
-        if(test!=4) test=4; //setting variable to maintain loop after button press
-        else {
-          test=0;
-          updateBrightness(brightness);
-        }
-      } 
-      
-      else if(results.value == five){
-        
-        if(test!=5) test=5; 
-        else {
-          test=0;
-          updateBrightness(brightness);
-        }
-      }
-      irrecv.resume();
+  if(irrecv.decode(&results)){ //if button has been pressed
+
+//Serial.println(results.value, HEX);
+
+    if(results.value == plus && brightness<255){
+      brightness += 51;
+      updateBrightness(brightness);
     }
-    
-    Serial.print("TEST: ");
-    Serial.println(test); //test line to see if function has changed
-    if(test==4) music();
-    else if(test==5) cycleRGB();
+
+    else if(results.value == minus && brightness>0){
+      brightness -= 51;
+      updateBrightness(brightness);
+    }
+
+    else if(results.value == one || results.value == two || results.value == three){
+      x123(brightness);
+    }
+
+    else if(results.value == four){
+      if(test!=4) test=4; //setting variable to maintain loop after button press
+      else {
+        test=0;
+        updateBrightness(brightness);
+      }
+    }
+
+    else if(results.value == five){
+      if(test!=5) test=5;
+      else {
+        test=0;
+        updateBrightness(brightness);
+      }
+    }
+
+    irrecv.resume();
+
+  }
+
+  if(test==4) music();
+  else if(test==5) cycleRGB(cycleTime);
 }
