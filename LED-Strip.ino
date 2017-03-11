@@ -1,10 +1,11 @@
 //LED-Strip.ino
 //Author: Austin Beauchamp
+
 //TODO: Accept more IR signals
 //TODO: Add a function to cycle whatever colours are currently turned on
 //TODO: Fix music() function
 //TODO: Investigate weird coil whine when dimming lights or using cycleRBG() function.
-    //dimming to a certain point causes loss of responsiveness and gives off a slight whine where led strip plugs into breadboard
+  //dimming to a certain point causes loss of responsiveness and gives off a slight whine where led strip plugs into breadboard
 //TODO: Implement manual cycleRGB() spectrum cycle speeds
 
 #include <IRremote.h>
@@ -105,8 +106,8 @@ void music(){
 
 void cycleRGB(int cycleTime){
 
-  bool pressed = false; //stores if a button has been pressed to signal a full loop stop of all loops
-  bool check = true;
+  bool pressed = false; //stores if a button has been pressed to signal a full break out of all loops
+  //bool check = true;
   for (int i=0; i<6; i++) {
 
     if(pressed) break;
@@ -118,6 +119,7 @@ void cycleRGB(int cycleTime){
       if(pressed) break;
 
       Serial.println(cycleTime); //where the colours changes are determined
+
       blueCycle = bluearr[i]*255+(bluearr[k] - bluearr[i])*j;
       redCycle = redarr[i]*255+(redarr[k]  - redarr[i])*j;
       greenCycle = greenarr[i]*255+(greenarr[k] - greenarr[i])*j;
@@ -129,43 +131,43 @@ void cycleRGB(int cycleTime){
       //acting as a 20ms delay and checking for button presses to know when to exit
       long startTime = millis();
 
-      //TODO: FIX ALL OF THIS
+
       while(millis() - startTime < cycleTime){
 
-        if(irrecv.decode(&results) && check){
+        if(irrecv.decode(&results) /*&& check*/){
 
           Serial.println(results.value, HEX);
-          /*
+
+          //TODO: FIX ALL OF THIS
           if(results.value == plus && cycleTime<50){
-            cycleTime++;
-            check = false;
+            cycleTime+=10;
+            //check = false;
             //Serial.println(results.value, HEX);
           }
 
           else if(results.value == minus && cycleTime>1){
-            cycleTime--;
-            check = false;
+            cycleTime-=10;
+            //check = false;
           }
 
           else if(results.value != minus && results.value != plus && results.value != 0xFFFFFF){
             Serial.print("EXIT: ");
-            Serial.println(results.value, HEX);*/
+            Serial.println(results.value, HEX);
             test=0;
             pressed = true;
-            break;//hard breaking out of all the loops
+            break; //hard breaking out of all the loops
           }
         }
       }
     }
   }
-  if(pressed)off();//reset led states
+  if(pressed) off();//reset led states
 }
 
 void loop() {
 
   if(irrecv.decode(&results)){ //if button has been pressed
-
-//Serial.println(results.value, HEX);
+    //Serial.println(results.value, HEX);
 
     if(results.value == plus && brightness<255){
       brightness += 51;
@@ -203,4 +205,5 @@ void loop() {
 
   if(test==4) music();
   else if(test==5) cycleRGB(cycleTime);
+
 }
