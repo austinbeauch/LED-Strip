@@ -22,6 +22,11 @@ const static double two = 0xFF18E7; //red
 const static double three = 0xFF7A85; //blue
 const static double four = 0xFF10EF; //music()
 const static double five = 0xFF38C7; //cycleRGB()
+const static double six = 0xFF5AA5; //cycleRGBvariable
+const static double seven = 0xFF42BD;
+const static double eight = 0xFF4AB5;
+const static double nine = 0xFF52AD;
+
 const static double plus = 0xFFA857; //brightness up
 const static double minus = 0xFFE01F; //brightness down
 
@@ -51,42 +56,42 @@ void setup() {
   irrecv.enableIRIn();
 }
 
-void off(){
+void off() {
   digitalWrite(GREEN,LOW);
   digitalWrite(RED,LOW);
   digitalWrite(BLUE,LOW);
 }
 
-void on(){
+void on() {
   digitalWrite(GREEN,HIGH);
   digitalWrite(RED,HIGH);
   digitalWrite(BLUE,HIGH);
 }
 
 //turns lights on accordingly
-void x123(int brightness){
-  if(results.value == one){
+void x123(int brightness) {
+  if (results.value == one) {
     green = !green;
     green ? analogWrite(GREEN, brightness) : digitalWrite(GREEN,LOW); //turning on or off depending on state
   }
-  else if(results.value == two){
+  else if (results.value == two) {
     red = !red;
     red ? analogWrite(RED, brightness) : digitalWrite(RED,LOW);
   }
-  else if(results.value == three){
+  else if (results.value == three) {
     blue = !blue;
     blue ? analogWrite(BLUE, brightness) : digitalWrite(BLUE,LOW);
   }
 }
 
 //purely updating brightness
-void updateBrightness(int brightness){
-  if(green) analogWrite(GREEN, brightness);
-  if(red) analogWrite(RED, brightness);
-  if(blue) analogWrite(BLUE, brightness);
+void updateBrightness(int brightness) {
+  if (green) analogWrite(GREEN, brightness);
+  if (red) analogWrite(RED, brightness);
+  if (blue) analogWrite(BLUE, brightness);
 }
 
-void music(){
+void music() {
 
   //TODO: Figure out why turning on any of the lights increases the read values (voltage from 12v psu might be interfering)
   //TODO: Test voltages with multimeter
@@ -96,27 +101,73 @@ void music(){
 
   off();
 
-  if(green && volume>0) digitalWrite(GREEN, HIGH);
-  if(red && volume>0) digitalWrite(RED, HIGH);
-  if(blue && volume>0) digitalWrite(BLUE, HIGH);
+  if (green && volume > 0) digitalWrite(GREEN, HIGH);
+  if (red && volume > 0) digitalWrite(RED, HIGH);
+  if (blue && volume > 0) digitalWrite(BLUE, HIGH);
   delay(100);
 
   off();
 }
 
-void cycleRGB(int cycleTime){
+void cycleRGBvariable() {
 
   bool pressed = false; //stores if a button has been pressed to signal a full break out of all loops
   //bool check = true;
-  for (int i=0; i<6; i++) {
+  for (int i = 0; i < 6; i++) {
 
-    if(pressed) break;
+    if (pressed) break;
+
+    int k = (i + 1)%6;
+
+    for (int j = 0; j<256; j++) {
+
+      if (pressed) break;
+
+      Serial.println(cycleTime); //where the colours changes are determined
+
+      if (blue) blueCycle = bluearr[i]*255+(bluearr[k] - bluearr[i])*j;
+      if (red) redCycle = redarr[i]*255+(redarr[k]  - redarr[i])*j;
+      if (green) greenCycle = greenarr[i]*255+(greenarr[k] - greenarr[i])*j;
+
+      analogWrite (RED, redCycle);
+      analogWrite (GREEN, greenCycle);
+      analogWrite (BLUE, blueCycle);
+
+      //acting as a 20ms delay and checking for button presses to know when to exit
+      long startTime = millis();
+
+
+      while (millis() - startTime < 5) {
+
+        //just break out if any button is pressed.
+        if (irrecv.decode(&results)) {
+
+          Serial.print("EXIT: ");
+          Serial.println(results.value, HEX);
+          test=0;
+          pressed = true;
+          break; //hard breaking out of all the loops
+
+        }
+      }
+    }
+  }
+  if (pressed) updateBrightness(brightness);//reset led states
+}
+
+void cycleRGB(int cycleTime) {
+
+  bool pressed = false; //stores if a button has been pressed to signal a full break out of all loops
+  //bool check = true;
+  for (int i = 0; i < 6; i++) {
+
+    if (pressed) break;
 
     int k = (i+1)%6;
 
-    for (int j=0; j<256; j++) {
+    for (int j = 0; j < 256; j++) {
 
-      if(pressed) break;
+      if (pressed) break;
 
       Serial.println(cycleTime); //where the colours changes are determined
 
@@ -131,26 +182,27 @@ void cycleRGB(int cycleTime){
       //acting as a 20ms delay and checking for button presses to know when to exit
       long startTime = millis();
 
+      //results.value doesn't reset the value after it's been pressed,
+      // so the while loop keeps iterating on whatever statement it matches
+      while (millis() - startTime < cycleTime) {
 
-      while(millis() - startTime < cycleTime){
-
-        if(irrecv.decode(&results) /*&& check*/){
+        if (irrecv.decode(&results) /*&& check*/) {
 
           Serial.println(results.value, HEX);
 
           //TODO: FIX ALL OF THIS
-          if(results.value == plus && cycleTime<50){
+          if (results.value == plus && cycleTime<50) {
             cycleTime+=10;
             //check = false;
             //Serial.println(results.value, HEX);
           }
 
-          else if(results.value == minus && cycleTime>1){
+          else if (results.value == minus && cycleTime>1) {
             cycleTime-=10;
             //check = false;
           }
 
-          else if(results.value != minus && results.value != plus && results.value != 0xFFFFFF){
+          else if (results.value != minus && results.value != plus && results.value != 0xFFFFFF) {
             Serial.print("EXIT: ");
             Serial.println(results.value, HEX);
             test=0;
@@ -166,33 +218,41 @@ void cycleRGB(int cycleTime){
 
 void loop() {
 
-  if(irrecv.decode(&results)){ //if button has been pressed
-    //Serial.println(results.value, HEX);
+  if (irrecv.decode(&results)) { //if button has been pressed
+    Serial.println(results.value, HEX);
 
-    if(results.value == plus && brightness<255){
+    if (results.value == plus && brightness<255) {
       brightness += 51;
       updateBrightness(brightness);
     }
 
-    else if(results.value == minus && brightness>0){
+    else if (results.value == minus && brightness>0) {
       brightness -= 51;
       updateBrightness(brightness);
     }
 
-    else if(results.value == one || results.value == two || results.value == three){
+    else if (results.value == one || results.value == two || results.value == three) {
       x123(brightness);
     }
 
-    else if(results.value == four){
-      if(test!=4) test=4; //setting variable to maintain loop after button press
+    else if (results.value == four) {
+      if (test!=4) test = 4; //setting variable to maintain loop after button press
       else {
         test=0;
         updateBrightness(brightness);
       }
     }
 
-    else if(results.value == five){
-      if(test!=5) test=5;
+    else if (results.value == five) {
+      if (test != 5) test = 5;
+      else {
+        test=0;
+        updateBrightness(brightness);
+      }
+    }
+
+    else if (results.value == six) {
+      if (test != 6) test = 6;
       else {
         test=0;
         updateBrightness(brightness);
@@ -203,7 +263,20 @@ void loop() {
 
   }
 
-  if(test==4) music();
-  else if(test==5) cycleRGB(cycleTime);
+  switch (test) {
+    case 4:
+      music();
+      break;
+    case 5:
+      cycleRGB(cycleTime);
+      break;
+    case 6:
+      cycleRGBvariable();
+      break;
+  }
+
+  // if(test==4) music();
+  // else if(test==5) cycleRGB(cycleTime);
+  // else if(test==6) cycleRGBvariable();
 
 }
