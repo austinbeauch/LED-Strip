@@ -10,7 +10,7 @@
 
 #include <IRremote.h>
 
-//pin numbers
+//pin numbers (not personal information number numbers)
 const static int GREEN = 9;
 const static int RED = 5;
 const static int BLUE = 6;
@@ -43,6 +43,7 @@ int greenarr[] = {1, 0, 0, 0, 1, 1};
 int redCycle, greenCycle, blueCycle;
 int cycleTime = 20;
 
+
 void setup() {
   Serial.begin(9600);
   pinMode(GREEN,OUTPUT);
@@ -51,11 +52,13 @@ void setup() {
   irrecv.enableIRIn();
 }
 
+
 void off(){
   digitalWrite(GREEN,LOW);
   digitalWrite(RED,LOW);
   digitalWrite(BLUE,LOW);
 }
+
 
 void on(){
   digitalWrite(GREEN,HIGH);
@@ -79,6 +82,7 @@ void x123(int brightness){
   }
 }
 
+
 //purely updating brightness
 void updateBrightness(int brightness){
   if(green) analogWrite(GREEN, brightness);
@@ -86,43 +90,25 @@ void updateBrightness(int brightness){
   if(blue) analogWrite(BLUE, brightness);
 }
 
-void music(){
-
-  //TODO: Figure out why turning on any of the lights increases the read values (voltage from 12v psu might be interfering)
-  //TODO: Test voltages with multimeter
-
-  int volume = digitalRead(13);
-  Serial.println(volume);
-
-  off();
-
-  if(green && volume>0) digitalWrite(GREEN, HIGH);
-  if(red && volume>0) digitalWrite(RED, HIGH);
-  if(blue && volume>0) digitalWrite(BLUE, HIGH);
-  delay(100);
-
-  off();
-}
 
 void cycleRGB(int cycleTime){
-
   bool pressed = false; //stores if a button has been pressed to signal a full break out of all loops
   //bool check = true;
   for (int i=0; i<6; i++) {
 
-    if(pressed) break;
+    if (pressed) break;
 
     int k = (i+1)%6;
 
     for (int j=0; j<256; j++) {
 
-      if(pressed) break;
+      if (pressed) break;
 
       Serial.println(cycleTime); //where the colours changes are determined
 
-      blueCycle = bluearr[i]*255+(bluearr[k] - bluearr[i])*j;
-      redCycle = redarr[i]*255+(redarr[k]  - redarr[i])*j;
-      greenCycle = greenarr[i]*255+(greenarr[k] - greenarr[i])*j;
+      blueCycle = bluearr[i] * 255 + (bluearr[k] - bluearr[i]) * j;
+      redCycle = redarr[i] * 255 + (redarr[k]  - redarr[i]) * j;
+      greenCycle = greenarr[i] * 255 + (greenarr[k] - greenarr[i]) * j;
 
       analogWrite (RED, redCycle);
       analogWrite (GREEN, greenCycle);
@@ -134,7 +120,7 @@ void cycleRGB(int cycleTime){
 
       while(millis() - startTime < cycleTime){
 
-        if(irrecv.decode(&results) /*&& check*/){
+        if (irrecv.decode(&results)){
 
           Serial.println(results.value, HEX);
 
@@ -150,7 +136,7 @@ void cycleRGB(int cycleTime){
             //check = false;
           }
 
-          else if(results.value != minus && results.value != plus && results.value != 0xFFFFFF){
+          else if (results.value != minus && results.value != plus && results.value != 0xFFFFFF){
             Serial.print("EXIT: ");
             Serial.println(results.value, HEX);
             test=0;
@@ -161,8 +147,9 @@ void cycleRGB(int cycleTime){
       }
     }
   }
-  if(pressed) off();//reset led states
+  if (pressed) off();//reset led states
 }
+
 
 void loop() {
 
